@@ -1,32 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
+
     <div class="box">
-        <h1>Todo List</h1>
-    </div>
-    <div class="box">
-        <% for(var i=0;i< ejes.length;i++){ %>
+        <!-- Filter Dropdown -->
+        <form>
+            <select name="priority" onchange="location.href='/filter/'+this.value">
+                <option disabled selected>Filter By Priority</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="all">All</option>
+            </select>
+        </form>
+
+        <!-- Todo List -->
+        <% for(var i=0; i<ejes.length; i++) { %>
             <div class="item">
-                <input type="checkbox" name="" id="">
-                <p>
-                    <%= ejes[i] %>
-                </p>
+                <input type="checkbox" name="">
+                <p><%= ejes[i].text %> - <strong><%= ejes[i].priority %></strong></p>
             </div>
-            <% } %>
 
-                <form action="/" method="post">
-                    <input type="text" name="ele" placeholder="Enter the task:">
-                    <button type="submit">+</button>
-                </form>
+            <!-- Edit Task -->
+            <form action="/<%= ejes[i].id %>?_method=PUT" method="post" class="edit-form">
+                <input type="text" name="newText" placeholder="Edit task">
+                <select name="newPriority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+                <button type="submit">✏️</button>
+            </form>
+
+            <!-- Delete Task -->
+            <form action="/<%= ejes[i].id %>?_method=DELETE" method="post">
+                <button type="submit">🗑️</button>
+            </form>
+        <% } %>
+
+        <!-- Add Task -->
+        <form action="/" method="post" id="taskForm">
+            <input type="text" name="ele" placeholder="Enter the task:" id="taskInput">
+            <select name="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            <button type="submit">+</button>
+        </form>
     </div>
-</body>
 
+    <!-- JS Validation -->
+    <script>
+        document.getElementById("taskForm").addEventListener("submit", function (e) {
+            const task = document.getElementById("taskInput").value.trim();
+            if (!task) {
+                e.preventDefault();
+                alert("Please enter a task before adding!");
+            }
+        });
+    </script>
+</body>
 </html>
