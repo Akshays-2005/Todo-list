@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
+const PORT = process.env.PORT || 3000;
 var app = express();
 
 app.use(express.static('public'));
@@ -51,7 +52,7 @@ app.delete("/:id", function (req, res) {
     res.redirect("/");
 })
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log('Server started');
 
 })
