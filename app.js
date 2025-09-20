@@ -1,58 +1,43 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
+const port=process.env.PORT || 3000;        
 
-const PORT = process.env.PORT || 3000;
-var app = express();
+var app=express();
+app.set("view engine","ejs");
+app.use(express.static("public"));  
+app.use(express.urlencoded({extended:true}));
 
-app.use(express.static('public'));
-app.use(methodOverride("_method"));
+var items=[];
 
-app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }));
-
-let items = [];
-
-app.get("/", function (req, res) {
-    res.render("list", { ejes: items });
+app.get("/",function(req,res){
+    res.render("list" , { ejes: items,params:req.query});
 });
 
-app.get("/filter/:priority", function (req, res) {
-    if (req.params.priority.toLowerCase() === "all") {
-        res.render("list", { ejes: items });
-    } else {
-        const filtered = items.filter(t => t.priority.toLowerCase() === req.params.priority.toLowerCase());
-        res.render("list", { ejes: filtered });
-    }
-});
-
-app.post("/", function (req, res) {
-    const item = {
-        id: Date.now(),
-        text: req.body.ele,
-        priority: req.body.priority
-    }
+app.post("/",function(req,res){
+    var item=req.body.ele1.trim();
+    if(item.length==0) return res.redirect("/?error=empty");
     items.push(item);
     res.redirect("/");
-})
+});
 
-app.put("/:id", function (req, res) {
-    const id = parseInt(req.params.id);
-    const item = items.find(t => t.id === id);
-    if (item) {
-        item.text = req.body.newText || item.text;
-        item.priority = req.body.newPriority || item.priority;
+app.post("/delete",function(req,res){
+    const index=req.body.index;
+    if(index!=undefined){
+        items.splice(index,1);
     }
     res.redirect("/");
-})
+});
 
-app.delete("/:id", function (req, res) {
-    const id = parseInt(req.params.id);
-    items = items.filter(t => t.id != id);
+app.post("/edit",function(req,res){
+    const index=parseInt(req.body.index);
+    const editedTask=req.body.editedTask.trim();
+    if(!isNaN(index) && editedTask.length>0){    
+        items[index]=editedTask;
+    }
     res.redirect("/");
-})
+});
 
-app.listen(PORT, () => {
-    console.log('Server started');
-
+app.listen(port,()=>{
+    console.log("Server Started");
+    
 })

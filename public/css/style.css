@@ -32,11 +32,12 @@ h1 {
     justify-content: space-between;
     border-bottom: 1px solid #f1f1f1;
     padding: 0 20px;
+    margin-left: 10px;
 }
 
 .item p {
     flex: 1;
-    margin: 0;
+    margin-left: 10px;
     padding-right: 10px;
 }
 
