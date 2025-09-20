@@ -6,7 +6,7 @@ It allows users to add, edit, delete, and filter tasks by priority.
 ---
 
 ## 🚀 Live Demo (Deployed on Render)
-👉 [Click here to view the project](https://todo-list-43yq.onrender.com/)
+👉 [Click here to view the project](https://todo-list-43yq.onrender.com)
 
 ---
 
