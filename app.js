@@ -16,14 +16,22 @@ app.get("/",function(req,res){
 app.post("/",function(req,res){
     var item=req.body.ele1.trim();
     if(item.length==0) return res.redirect("/?error=empty");
-    items.push(item);
+    items.push({task: item,completed: false});
     res.redirect("/");
 });
 
 app.post("/delete",function(req,res){
-    const index=req.body.index;
+    const index=parseInt(req.body.index);
     if(index!=undefined){
         items.splice(index,1);
+    }
+    res.redirect("/");
+});
+
+app.post("/toggle",function(req,res){
+    const index=parseInt(req.body.index);
+    if(!isNaN(index) && items[index]){
+        items[index].completed=!items[index].completed;
     }
     res.redirect("/");
 });
@@ -32,7 +40,7 @@ app.post("/edit",function(req,res){
     const index=parseInt(req.body.index);
     const editedTask=req.body.editedTask.trim();
     if(!isNaN(index) && editedTask.length>0){    
-        items[index]=editedTask;
+        items[index].task=editedTask;
     }
     res.redirect("/");
 });

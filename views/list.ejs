@@ -15,25 +15,30 @@
     <div class="box">
         <% for(var i=0; i < ejes.length ; i++){ %>
             <div class="item">
-                <form action="/delete" method="post" style="display: inline;">
+                <form action="/toggle" method="post" style="display: inline;">
                     <input type="hidden" name="index" value="<%= i %>">
                     <input type="checkbox" onchange="this.form.submit()">
                 </form>
                 <% if(params.edit && parseInt(params.edit)===i){ %>
                     <form action="/edit" method="post" style="display: inline;">
                         <input type="hidden" name="index" value="<%= i %>">
-                        <input type="text" name="editedTask" value="<%= ejes[i] %>">
+                        <input type="text" name="editedTask" value="<%= ejes[i].task %>">
                         <button type="submit">💾</button>
                     </form>
-                <% } else { %>
-                <p style="display: inline;">
-                    <%= ejes[i] %>
-                </p>
-                <form action="/" method="get" style="display: inline;">
-                    <input type="hidden" name="edit" value="<%= i %>">
-                    <button type="submit">✏️</button>
-                </form>
-                <% } %>
+                    <% } else { %>
+                        <p class="<%= ejes[i].completed ? 'completed' : '' %>">
+                            <%= ejes[i].task %>
+                        </p>
+
+                        <form action="/" method="get" style="display: inline;">
+                            <input type="hidden" name="edit" value="<%= i %>">
+                            <button type="submit">✏️</button>
+                        </form>
+                        <form action="/delete" method="post" style="display: inline;">
+                            <input type="hidden" name="index" value="<%= i %>">
+                            <button type="submit">🗑️</button>
+                        </form>
+                        <% } %>
 
             </div>
             <% } %>
